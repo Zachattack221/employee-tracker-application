@@ -1,7 +1,7 @@
 const express = require('express');
 require('console.table');
 const mysql = require('mysql2');
-
+const inquirer = require('inquirer');
 const PORT = process.env.PORT || 3001;
 const app = express();
 
@@ -9,9 +9,10 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// const prompt = inquirer.createPromptModule();
-// prompt()
+// TODO: add additional functionality: Update Employee Manger, View Employees by Manager, View Employees by Department, Delete Departments,Delete Roles, Delete Employees, View Total Utilized Budget
 
+// location to push changed content to eventually
+possibleNewTeam = []
 
 const db = mysql.createConnection(
     {
@@ -23,47 +24,89 @@ const db = mysql.createConnection(
     console.log(`Connected to the employees database.`)
 );
 
-// db.query(`
-// SELECT role.id,
-// role.title, 
-// role.salary,
-// department.department_name AS department
-// FROM role 
-// INNER JOIN department ON role.department_id = department.id
-// `, (err, employees) => {
-//     if (err) console.log(err);
-//     console.table(employees);
-// });
+const prompt = inquirer.createPromptModule();
 
-// LEFT JOIN role ON role.department_id = department.name 
+const mainPrompts = () => {
+    prompt([
+        {
+            type: 'rawlist',
+            name: 'choices',
+            message: 'Please select an option:',
+            choices: [
+                'View All Departments',
+                'View All Roles',
+                'View All Employees',
+                'Add a Department',
+                'Add a Role',
+                'Add an Employee',
+                'Update Employee Role',
+                'Exit'
+            ]
+        }
+    ]).then((answers) => {
+        const { choices } = answers;
+        if (choices === 'View All Departments') {
+            viewAllDep();
+        }
+        if (choices === 'View All Roles') {
+            viewAllRoles();
+        }
+        if (choices === 'View All Employees') {
+            viewAllEmp();
+        }
+        if (choices === 'Add a Department') {
+            addDep();
+        }
+        if (choices === 'Add a Role') {
+            addRole();
+        }
+        if (choices === 'Add an Employee') {
+            addEmp();
+        }
+        if (choices === 'Update Employee Role') {
+            updateEmp();
+        }
+        // if (choices === 'Exit') {
+        //     return "Thank you!"
+        // }
+    });
+};
 
-db.query(`
+const viewAllRoles = () => {
+    db.query(`
+    SELECT role.id,
+    role.title, 
+    department.department_name AS department,
+    role.salary
+    FROM role 
+    INNER JOIN department ON role.department_id = department.id
+    `, (err, roles) => {
+        if (err) console.log(err);
+        console.table(roles);
+        mainPrompts();
+    });
+};
+
+const viewAllEmp = () => {
+    db.query(`
 SELECT
-  e.id,
-  CONCAT(e.first_name, ' ', e.last_name) AS name,
-  role.title,
-  role.salary,
-  CONCAT(m.first_name, ' ', m.last_name) AS manager_name
+e.id,
+CONCAT(e.first_name, ' ', e.last_name) AS name,
+role.title,
+role.salary,
+CONCAT(m.first_name, ' ', m.last_name) AS manager_name
 FROM employee e
 LEFT JOIN role
 ON e.role_id = role.id
 LEFT JOIN employee m
 ON e.manager_id = m.id
 `, (err, employees) => {
-  if (err) console.log(err);
-  console.table(employees);
-});
+        if (err) console.log(err);
+        console.table(employees);
+        mainPrompts();
+    });
+};
 
-
-// TODO: create functions/query requests for items below:
-
-// view all departments, 
-// view all roles, 
-// view all employees, 
-// add a department, 
-// add a role, 
-// add an employee, 
-// and update an employee role
 
 
 // simple query, placeholder for content
@@ -79,12 +122,15 @@ ON e.manager_id = m.id
 // }
 // );
 
+
 // Default response for any other request (Not Found)
 app.use((req, res) => {
     res.status(404).end();
-  });
+});
 
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);
 });
 
+
+mainPrompts()
