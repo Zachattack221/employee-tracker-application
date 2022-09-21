@@ -1,5 +1,5 @@
 const express = require('express');
-const cTable = require('console.table');
+require('console.table');
 const mysql = require('mysql2');
 
 const PORT = process.env.PORT || 3001;
@@ -16,13 +16,44 @@ app.use(express.json());
 const db = mysql.createConnection(
     {
         host: 'localhost',
-        // MySQL Username
         user: 'root',
         password: '',
         database: 'employees'
     },
-    console.log(`Connected to the tracker-db database.`)
+    console.log(`Connected to the employees database.`)
 );
+
+// db.query(`
+// SELECT role.id,
+// role.title, 
+// role.salary,
+// department.department_name AS department
+// FROM role 
+// INNER JOIN department ON role.department_id = department.id
+// `, (err, employees) => {
+//     if (err) console.log(err);
+//     console.table(employees);
+// });
+
+// LEFT JOIN role ON role.department_id = department.name 
+
+db.query(`
+SELECT
+  e.id,
+  CONCAT(e.first_name, ' ', e.last_name) AS name,
+  role.title,
+  role.salary,
+  CONCAT(m.first_name, ' ', m.last_name) AS manager_name
+FROM employee e
+LEFT JOIN role
+ON e.role_id = role.id
+LEFT JOIN employee m
+ON e.manager_id = m.id
+`, (err, employees) => {
+  if (err) console.log(err);
+  console.table(employees);
+});
+
 
 // TODO: create functions/query requests for items below:
 
@@ -48,6 +79,12 @@ const db = mysql.createConnection(
 // }
 // );
 
+// Default response for any other request (Not Found)
+app.use((req, res) => {
+    res.status(404).end();
+  });
+
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);
 });
+
