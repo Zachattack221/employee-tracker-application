@@ -72,6 +72,15 @@ const mainPrompts = () => {
     });
 };
 
+const viewAllDep = () => {
+    db.query(`
+    SELECT department.department_name AS department, department.id AS id FROM department`, (err, departments) => {
+        if (err) console.log(err);
+        console.table(departments);
+        mainPrompts();
+    });
+};
+
 const viewAllRoles = () => {
     db.query(`
     SELECT role.id,
@@ -107,6 +116,70 @@ ON e.manager_id = m.id
     });
 };
 
+// set up function structure for remaining choices, triggered from prompt module
+
+const addDep = () => {
+    db.query(``, (err, newDepartments) => {
+        if (err) console.log(err);
+        console.table(newDepartments);
+        mainPrompts();
+    });
+};
+
+
+
+const addRole = () => {
+    db.query(``, (err, newRoles) => {
+        if (err) console.log(err);
+        console.table(newRoles);
+        mainPrompts();
+    });
+};
+
+
+
+const updateEmp = () => {
+    db.query(``, (err, updatedEmployees) => {
+        if (err) console.log(err);
+        console.table(updatedEmployees);
+        mainPrompts();
+    });
+};
+
+
+
+const addEmp = () => {
+    prompt([
+        {
+        type: 'input',
+        name: 'firstName',
+        message: 'Please enter an employee first name:'
+        },
+        {
+        type: 'input',
+        name: 'lastName',
+        message: 'Please enter an employee last name:'
+        },
+        {
+        type: 'list',
+        name: 'role',
+        message: 'Please select an employee role',
+        choices: ""
+        },
+        {
+        type: 'list',
+        name: 'manager',
+        message: 'Please select the current employee\'s manager if applicable',
+        choices: ""
+        },
+
+    ]).then()
+    db.query(``, (err, addedEmployees) => {
+        if (err) console.log(err);
+        console.table(addedEmployees);
+        mainPrompts();
+    });
+};
 
 
 // simple query, placeholder for content

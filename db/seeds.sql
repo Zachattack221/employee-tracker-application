@@ -19,12 +19,12 @@ VALUES
 /* added mock employee content, defaulted manager_id to NULL temporarily */
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES
-('Jason', 'Bateman', 1, 1),
-('Michael', 'Cera', 2, NULL),
-('Jessica', 'Walter', 3, 2),
-('Will', 'Arnet', 4, NULL),
-('David', 'Cross', 5, 3),
-('Tony', 'Hale', 6, NULL),
-('Portia', 'DeRossi', 7, 4),
-('Ron', 'Howard', 8, NULL);
+('Jason', 'Bateman', 1, NULL),
+('Michael', 'Cera', 2, 1),
+('Jessica', 'Walter', 3, NULL),
+('Will', 'Arnet', 4, 3),
+('David', 'Cross', 5, NULL),
+('Tony', 'Hale', 6, 5),
+('Portia', 'DeRossi', 7, NULL),
+('Ron', 'Howard', 8, 7);
 
