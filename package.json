@@ -6,7 +6,8 @@
     "mysql2": "^2.3.3"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "watch": "nodemon server.js"
   },
   "name": "employee-tracker-application",
   "description": "1. [Description](#description)\r 2. [Installation](#installation)\r 3. [Visuals](#visuals)\r 4. [License](#license)",
@@ -22,5 +23,6 @@
   "bugs": {
     "url": "https://github.com/Zachattack221/employee-tracker-application/issues"
   },
-  "homepage": "https://github.com/Zachattack221/employee-tracker-application#readme"
+  "homepage": "https://github.com/Zachattack221/employee-tracker-application#readme",
+  "devDependencies": {}
 }

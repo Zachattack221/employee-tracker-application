@@ -2,6 +2,7 @@ const express = require('express');
 require('console.table');
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
+
 const PORT = process.env.PORT || 3001;
 const app = express();
 
@@ -12,7 +13,6 @@ app.use(express.json());
 // TODO: add additional functionality: Update Employee Manger, View Employees by Manager, View Employees by Department, Delete Departments,Delete Roles, Delete Employees, View Total Utilized Budget
 
 // location to push changed content to eventually, may be unnecessary 
-// possibleNewDepartments = []
 
 
 const db = mysql.createConnection(
@@ -23,12 +23,12 @@ const db = mysql.createConnection(
         database: 'employees'
     },
     console.log(`Connected to the employees database.`)
-);
-
-const prompt = inquirer.createPromptModule();
-
-const mainPrompts = () => {
-    prompt([
+    );
+    
+    const prompt = inquirer.createPromptModule();
+    
+    const mainPrompts = () => {
+        prompt([
         {
             type: 'rawlist',
             name: 'choices',
@@ -67,9 +67,10 @@ const mainPrompts = () => {
         if (choices === 'Update Employee Role') {
             updateEmp();
         }
-        // if (choices === 'Exit') {
-        //     return "Thank you!"
-        // }
+        if (choices === 'Exit') {
+            console.log("Thank you!");
+            process.exit();
+        }
     });
 };
 
@@ -99,18 +100,18 @@ const viewAllRoles = () => {
 
 const viewAllEmp = () => {
     db.query(`
-SELECT
-e.id,
-CONCAT(e.first_name, ' ', e.last_name) AS name,
-role.title,
-role.salary,
-CONCAT(m.first_name, ' ', m.last_name) AS manager_name
-FROM employee e
-LEFT JOIN role
-ON e.role_id = role.id
-LEFT JOIN employee m
-ON e.manager_id = m.id
-`, (err, employees) => {
+    SELECT
+    e.id,
+    CONCAT(e.first_name, ' ', e.last_name) AS name,
+    role.title,
+    role.salary,
+    CONCAT(m.first_name, ' ', m.last_name) AS manager_name
+    FROM employee e
+    LEFT JOIN role
+    ON e.role_id = role.id
+    LEFT JOIN employee m
+    ON e.manager_id = m.id
+    `, (err, employees) => {
         if (err) console.log(err);
         console.table(employees);
         mainPrompts();
@@ -122,14 +123,53 @@ ON e.manager_id = m.id
 const addDep = () => {
     prompt([
         {
-        type: 'input',
-        name: 'newDepartment',
-        message: 'Please enter the new department name.'
+            type: 'input',
+            name: 'newDepartment',
+            message: 'Please enter the new department name.'
         }
     ])
     .then((answer) => {
-    db.query(`INSERT INTO department (department_name) VALUES (?)`, answer.newDepartment, (err, newDepartment) => {
+        db.query(`INSERT INTO department (department_name) VALUES (?)`, answer.newDepartment, (err, newDepartment) => {
+            if (err) console.log(err);
+            viewAllDep();
+        });
+    });
+};
+
+
+
+const addRole = async () => {
+    await db.query('SELECT * FROM department', (err,res) = {
         if (err) console.log(err);
+        const possibleDepartments = [];
+        res.forEach((department) => {possibleDepartments.push(department_name);
+        });
+    });
+    prompt([
+        {
+            type: 'input',
+            name: 'newRole',
+            message: 'Please enter the new role.'
+        },
+        {
+            type: 'input',
+            name: 'newSalary',
+            message: 'Please enter the salary for this new role.'
+        },
+        {
+            type: 'rawlist',
+            name: 'newDept',
+            message: 'Please enter the new department for this role.',
+            // TODO: have choices populate with a dynamically filled array of existing departments
+            choices: possibleDepartments
+        }
+    ])
+    .then((answer) => {
+        db.query(`
+        INSERT INTO role (title, salary, department_id)
+        VALUES (?,?,?)`, [answer.newRole, answer.newSalary, answer.newDept], (err, res) => {
+            if (err) console.log(err);
+        console.table(res);
         viewAllDep();
     });
 });
@@ -137,44 +177,13 @@ const addDep = () => {
 
 
 
-const addRole = () => {
-    prompt([
-        {
-        type: 'input',
-        name: 'newRole',
-        message: 'Please enter the new role.'
-        }
-        {
-        type: 'number',
-        name: 'newSalary',
-        message: 'Please enter the salary for this new role.'
-        }
-        {
-        type: 'rawlist',
-        name: 'newDept',
-        message: 'Please enter the new department for this role.',
-        // TODO: have choices populate with a dynamically filled array of existing departments
-        choices: ""
-        }
-    ])
-    .then((answer) => {
-    db.query(``,answer.newRole, (err, newRole) => {
-        if (err) console.log(err);
-        // console.table(newRole);
-        mainPrompts();
-    });
-};
-
-
-
-
-const updateEmp = () => {
-    db.query(``, (err, updatedEmployees) => {
-        if (err) console.log(err);
-        console.table(updatedEmployees);
-        mainPrompts();
-    });
-};
+// const updateEmp = () => {
+//     db.query(``, (err, updatedEmployees) => {
+//         if (err) console.log(err);
+//         console.table(updatedEmployees);
+//         mainPrompts();
+//     });
+// };
 
 
 
@@ -212,20 +221,6 @@ const updateEmp = () => {
 //         mainPrompts();
 //     });
 // };
-
-
-// simple query, placeholder for content
-
-// db.query('SELECT * FROM _____', function (err, results) {
-//     // 'SELECT * FROM `table` WHERE `name` = ? AND `age` > ?',
-//     if (err) return console.log(err);
-//     [
-//         'Page',
-//         45
-//     ],
-//         console.log(results); // results contains rows returned by server
-// }
-// );
 
 
 // Default response for any other request (Not Found)
