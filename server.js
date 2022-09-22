@@ -11,8 +11,9 @@ app.use(express.json());
 
 // TODO: add additional functionality: Update Employee Manger, View Employees by Manager, View Employees by Department, Delete Departments,Delete Roles, Delete Employees, View Total Utilized Budget
 
-// location to push changed content to eventually
-possibleNewTeam = []
+// location to push changed content to eventually, may be unnecessary 
+// possibleNewDepartments = []
+
 
 const db = mysql.createConnection(
     {
@@ -119,22 +120,51 @@ ON e.manager_id = m.id
 // set up function structure for remaining choices, triggered from prompt module
 
 const addDep = () => {
-    db.query(``, (err, newDepartments) => {
+    prompt([
+        {
+        type: 'input',
+        name: 'newDepartment',
+        message: 'Please enter the new department name.'
+        }
+    ])
+    .then((answer) => {
+    db.query(`INSERT INTO department (department_name) VALUES (?)`, answer.newDepartment, (err, newDepartment) => {
         if (err) console.log(err);
-        console.table(newDepartments);
-        mainPrompts();
+        viewAllDep();
     });
+});
 };
 
 
 
 const addRole = () => {
-    db.query(``, (err, newRoles) => {
+    prompt([
+        {
+        type: 'input',
+        name: 'newRole',
+        message: 'Please enter the new role.'
+        }
+        {
+        type: 'number',
+        name: 'newSalary',
+        message: 'Please enter the salary for this new role.'
+        }
+        {
+        type: 'rawlist',
+        name: 'newDept',
+        message: 'Please enter the new department for this role.',
+        // TODO: have choices populate with a dynamically filled array of existing departments
+        choices: ""
+        }
+    ])
+    .then((answer) => {
+    db.query(``,answer.newRole, (err, newRole) => {
         if (err) console.log(err);
-        console.table(newRoles);
+        // console.table(newRole);
         mainPrompts();
     });
 };
+
 
 
 
@@ -148,38 +178,40 @@ const updateEmp = () => {
 
 
 
-const addEmp = () => {
-    prompt([
-        {
-        type: 'input',
-        name: 'firstName',
-        message: 'Please enter an employee first name:'
-        },
-        {
-        type: 'input',
-        name: 'lastName',
-        message: 'Please enter an employee last name:'
-        },
-        {
-        type: 'list',
-        name: 'role',
-        message: 'Please select an employee role',
-        choices: ""
-        },
-        {
-        type: 'list',
-        name: 'manager',
-        message: 'Please select the current employee\'s manager if applicable',
-        choices: ""
-        },
-
-    ]).then()
-    db.query(``, (err, addedEmployees) => {
-        if (err) console.log(err);
-        console.table(addedEmployees);
-        mainPrompts();
-    });
-};
+// const addEmp = () => {
+//     prompt([
+//         {
+//         type: 'input',
+//         name: 'firstName',
+//         message: 'Please enter an employee first name:'
+//         },
+//         {
+//         type: 'input',
+//         name: 'lastName',
+//         message: 'Please enter an employee last name:'
+//         },
+//         {
+//         type: 'list',
+//         name: 'role',
+//         message: 'Please select an employee role',
+//         // TODO: add option dynamically
+//         choices: ""
+//     },
+//     {
+//         type: 'list',
+//         name: 'manager',
+//         message: 'Please select the current employee\'s manager if applicable',
+//         // TODO: add option dynamically
+//         choices: ""
+//         },
+// // TODO: convert to async 
+//     ]).then()
+//     db.query(``, (err, addedEmployees) => {
+//         if (err) console.log(err);
+//         console.table(addedEmployees);
+//         mainPrompts();
+//     });
+// };
 
 
 // simple query, placeholder for content
@@ -206,4 +238,4 @@ app.listen(PORT, () => {
 });
 
 
-mainPrompts()
+mainPrompts();
