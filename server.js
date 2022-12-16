@@ -10,8 +10,6 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-// TODO: add additional functionality: Update Employee Manger, View Employees by Manager, View Employees by Department, Delete Departments,Delete Roles, Delete Employees, View Total Utilized Budget
-
 const db = mysql.createConnection(
     {
         host: 'localhost',
