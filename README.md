@@ -7,7 +7,7 @@
 4. [License](#license)
 
 ## Description
-[GitHub Repository](https://github.com/Zachattack221/employee-tracker-application)
+[Live Site]()
 [Video Walkthrough](https://drive.google.com/file/d/1SUQinhfsyiIi1YnH0uyLxQHZKmnI9VTL/view)
 The goal of the Employee Tracker application is to provide the user with a contained environment to edit and compose a collection of employee information. Leveraging mysql and express this app creates a seeded mock database that can preform queries to access or change specific data pertaining to employees. The prompt module, handled via inquirer, guides the user through required fields and populates the SQL tables accordingly.
 
