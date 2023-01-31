@@ -7,12 +7,14 @@
 4. [License](#license)
 
 ## Description
-[Live Site]()
+[Repository](https://github.com/Zachattack221/employee-tracker-application)
+\
 [Video Walkthrough](https://drive.google.com/file/d/1SUQinhfsyiIi1YnH0uyLxQHZKmnI9VTL/view)
+\
 The goal of the Employee Tracker application is to provide the user with a contained environment to edit and compose a collection of employee information. Leveraging mysql and express this app creates a seeded mock database that can preform queries to access or change specific data pertaining to employees. The prompt module, handled via inquirer, guides the user through required fields and populates the SQL tables accordingly.
 
 ## Installation
-First start with establishing our mock database enviornment. 
+Once you have cloned the repository to your local machine, first start with establishing the mock database environment. 
 
 Run "mysql -u root" to instantiate the mysql shell. Once in this shell, you will need to first run "SOURCE db/schema.sql;" to establish our db structure. 
 
