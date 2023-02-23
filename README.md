@@ -3,8 +3,9 @@
 ## Table of Contents
 1. [Description](#description)
 2. [Installation](#installation)
-3. [Visuals](#visuals)
-4. [License](#license)
+3. [Technology](#technology)
+4. [Visuals](#visuals)
+5. [License](#license)
 
 ## Description
 [Repository](https://github.com/Zachattack221/employee-tracker-application)
@@ -23,8 +24,11 @@ Following this, still within the mysql shell, run "SOURCE db/seeds.sql;" to seed
 Now within your terminal, at the root level of the application, run "npm i" to pull in the remaining dependencies (mysql2, console.table, inquirer8.2.4, and express). 
 
 When all packages have installed, simply run "npm run start"  or "node server.js" to initialize process.
-
-
+## Technology
+MySQL - Relational database management system based on SQL – Structured Query Language, employed in this application to house and query employee/department/company information.
+Express.js - Used to govern middleware for end point connection between the frontend and backend processes/queries.
+Node.js - Uses JavaScript to structure command line tool for server-side scripting.
+Javascript - Server.js page establishes necessary npm installations, defines a local port to run app, instantiates inquirer prompt module, and defines necessary functions used to create, read, update, and delete various employee data sets.
 ## Visuals
 ![Viewing Departments and Roles](./images/FirstVisual.png)
 ![View All Employees](./images/SecondVisual.png)

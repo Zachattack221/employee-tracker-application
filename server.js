@@ -68,6 +68,7 @@ const mainPrompts = () => {
         }
     });
 };
+// Setting up queries within functions to quickly request employee/role/dept. datasets
 
 const viewAllDep = () => {
     db.query(`
