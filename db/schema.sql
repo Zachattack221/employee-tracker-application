@@ -1,4 +1,4 @@
-/* provided : */
+/* clears db if preexisting exists, creates new, specifies which db to use, establishes table structure */
 DROP DATABASE IF EXISTS employees;
 CREATE DATABASE employees;
 

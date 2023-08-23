@@ -241,6 +241,7 @@ app.use((req, res) => {
     res.status(404).end();
 });
 
+// Server message when successfully connected to port
 app.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`);
 });
